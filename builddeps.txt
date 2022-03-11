@@ -1,0 +1,4 @@
+ostree
+rpm-ostree
+rust-coreos-installer
+ignition

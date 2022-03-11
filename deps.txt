@@ -1,0 +1,17 @@
+vim-enhanced
+# this has clipboard support
+vim-X11
+tmux
+xsel
+
+irssi
+
+# provides /usr/bin/errno
+moreutils
+
+fedpkg
+python3-ipython
+cscope
+gdb
+fzf
+virt-install

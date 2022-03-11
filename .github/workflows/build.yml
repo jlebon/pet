@@ -1,0 +1,63 @@
+name: Build
+
+env:
+  QUAY_BASE: quay.io/jlebon/pet
+  TOOLBOX: registry.fedoraproject.org/fedora-toolbox
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: "Build container image"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Build container image
+        run: |
+          set -xeuo pipefail
+          stable=$(curl -L https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/builds.json | jq -r .builds[0].id | cut -f1 -d.)
+          rawhide=$(curl -L https://builds.coreos.fedoraproject.org/prod/streams/rawhide/builds/builds.json | jq -r .builds[0].id | cut -f1 -d.)
+          for n in $(seq $stable $rawhide); do
+            podman build --from $TOOLBOX:$n -t "${{ env.QUAY_BASE }}:f$n" .
+          done
+          echo "stable=${stable}" >> $GITHUB_ENV
+          echo "rawhide=${rawhide}" >> $GITHUB_ENV
+      - name: Push containers
+        run: |
+          set -xeuo pipefail
+          mkdir -p ~/.docker
+          cat > ~/.docker/config.json <<EOF
+          ${{ secrets.QUAY_AUTH }}
+          EOF
+          for n in $(seq $stable $rawhide); do
+            podman push "${{ env.QUAY_BASE }}:f$n"
+          done
+          podman tag "${{ env.QUAY_BASE }}:f$stable" "${{ env.QUAY_BASE }}:latest"
+          podman push "${{ env.QUAY_BASE }}:latest"
+          rm ~/.docker/config.json
+      - name: Update README
+        run: |
+          # This is load-bearing: GitHub will disable the job if the repo
+          # doesn't stay active.  Do not enable branch protection for main;
+          # it'll break this.
+          set -xeuo pipefail
+          git config user.name 'Jonathan Lebon'
+          git config user.email jonathan@jlebon.com
+          sed -i "s/updated-.*-green/updated-$(date +%Y--%m--%d)-green/" README.md
+          sed -i "s/fedora-toolbox:.*/fedora-toolbox:${stable}/" Containerfile
+          git add README.md Containerfile
+          if git diff --quiet --staged --exit-code; then
+            echo "README.md already up to date"
+            exit 0
+          fi
+          git commit -m "README.md: update build date"
+          git push

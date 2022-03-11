@@ -1,0 +1,37 @@
+#!/bin/bash
+set -euo pipefail
+
+# install packages
+grep -v '^#' deps.txt | xargs dnf install -y
+grep -v '^#' builddeps.txt | xargs dnf builddep -y
+
+# cosa
+(git clone https://github.com/coreos/coreos-assembler
+ cd coreos-assembler
+ sed -i "s/frozendeps=.*/frozendeps=/" build.sh
+ ./build.sh configure_yum_repos
+ ./build.sh install_rpms)
+
+# rpm-ostree test deps
+(git clone https://github.com/coreos/rpm-ostree
+ cd rpm-ostree
+ ci/install-test-deps.sh)
+
+# universal tags
+(git clone https://github.com/universal-ctags/ctags
+ cd ctags
+ ./autogen.sh
+ ./configure
+ make -j8
+ make install)
+
+# sudo
+echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+# add /usr/local to PATH
+echo 'Defaults secure_path = /usr/local/bin:/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin' >> /etc/sudoers
+
+# we want the host srv
+rmdir /srv && ln -sT /run/host/srv /srv
+
+# install rhsetup
+cp rhsetup /usr/bin
