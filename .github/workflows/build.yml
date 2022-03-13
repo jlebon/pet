@@ -21,30 +21,27 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Build container image
-        run: |
-          set -xeuo pipefail
-          stable=$(curl -L https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/builds.json | jq -r .builds[0].id | cut -f1 -d.)
-          rawhide=$(curl -L https://builds.coreos.fedoraproject.org/prod/streams/rawhide/builds/builds.json | jq -r .builds[0].id | cut -f1 -d.)
-          for n in $(seq $stable $rawhide); do
-            podman build --from $TOOLBOX:$n -t "${{ env.QUAY_BASE }}:f$n" .
-          done
-          echo "stable=${stable}" >> $GITHUB_ENV
-          echo "rawhide=${rawhide}" >> $GITHUB_ENV
-      - name: Push containers
+      - name: Build and push container images
         run: |
           set -xeuo pipefail
           mkdir -p ~/.docker
           cat > ~/.docker/config.json <<EOF
           ${{ secrets.QUAY_AUTH }}
           EOF
+          stable=$(curl -L https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/builds.json | jq -r .builds[0].id | cut -f1 -d.)
+          rawhide=$(curl -L https://builds.coreos.fedoraproject.org/prod/streams/rawhide/builds/builds.json | jq -r .builds[0].id | cut -f1 -d.)
           for n in $(seq $stable $rawhide); do
+            podman build --from $TOOLBOX:$n -t "${{ env.QUAY_BASE }}:f$n" .
             podman push "${{ env.QUAY_BASE }}:f$n"
+            if [[ $n == $stable ]]; then
+              podman tag "${{ env.QUAY_BASE }}:f$n" "${{ env.QUAY_BASE }}:latest"
+              podman push "${{ env.QUAY_BASE }}:latest"
+            fi
           done
-          podman tag "${{ env.QUAY_BASE }}:f$stable" "${{ env.QUAY_BASE }}:latest"
-          podman push "${{ env.QUAY_BASE }}:latest"
           rm ~/.docker/config.json
-      - name: Update README
+          echo "stable=${stable}" >> $GITHUB_ENV
+          echo "rawhide=${rawhide}" >> $GITHUB_ENV
+      - name: Update README and Containerfile
         run: |
           # This is load-bearing: GitHub will disable the job if the repo
           # doesn't stay active.  Do not enable branch protection for main;
