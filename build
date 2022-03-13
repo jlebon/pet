@@ -27,8 +27,6 @@ grep -v '^#' builddeps.txt | xargs dnf builddep -y
 
 # sudo
 echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-# add /usr/local to PATH
-echo 'Defaults secure_path = /usr/local/bin:/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin' >> /etc/sudoers
 
 # we want the host srv
 rmdir /srv && ln -sT /run/host/srv /srv
