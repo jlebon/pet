@@ -11,7 +11,7 @@ To use:
 
 ```
 toolbox create --image quay.io/jlebon/pet
-toolbox enter
+toolbox enter pet
 ```
 
 For Red Hat engineers, once connected to the VPN, you'll
