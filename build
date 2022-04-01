@@ -3,7 +3,6 @@ set -euo pipefail
 
 # install packages
 grep -v '^#' deps.txt | xargs dnf install -y
-grep -v '^#' builddeps.txt | xargs dnf builddep -y
 
 # cosa
 (git clone https://github.com/coreos/coreos-assembler
