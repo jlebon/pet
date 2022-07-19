@@ -32,5 +32,8 @@ grep -v '^#' deps.txt | xargs dnf install -y
 # we want the host srv
 rmdir /srv && ln -sT /run/host/srv /srv
 
+# and we want the kerberos config from the host
+ln -sf /run/host/etc/krb5.conf /etc/krb5.conf
+
 # install rhsetup
 cp rhsetup /usr/bin
