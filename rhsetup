@@ -10,3 +10,7 @@ sudo update-ca-trust extract
 cd /etc/yum.repos.d/
 sudo curl -L -O https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-fedora.repo
 sudo dnf install -y rhpkg
+
+if [ -e /run/host/etc/krb5.conf.d/redhat ]; then
+    sudo ln -s /run/host/etc/krb5.conf.d/redhat /etc/krb5.conf.d/
+fi
