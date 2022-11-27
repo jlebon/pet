@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/fedora-toolbox:36
+FROM registry.fedoraproject.org/fedora-toolbox:37
 MAINTAINER Jonathan Lebon <jonathan@jlebon.com>
 COPY . /pet
 RUN cd /pet && ./build && rm -rf /pet /var/cache/dnf
