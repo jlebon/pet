@@ -19,7 +19,7 @@ jobs:
     name: "Query Fedora versions"
     runs-on: ubuntu-latest
     outputs:
-      stable: ${{steps.query_versions.outputs.stable}}
+      cosa: ${{steps.query_versions.outputs.cosa}}
       matrix: ${{steps.query_versions.outputs.matrix}}
     steps:
       - name: Query Fedora versions
@@ -28,7 +28,8 @@ jobs:
           set -xeuo pipefail
           stable=$(curl -L https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/builds.json | jq -r .builds[0].id | cut -f1 -d.)
           rawhide=$(curl -L https://builds.coreos.fedoraproject.org/prod/streams/rawhide/builds/builds.json | jq -r .builds[0].id | cut -f1 -d.)
-          echo "::set-output name=stable::$stable"
+          cosa=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/main/Dockerfile | grep '^FROM ' | cut -f2 -d:)
+          echo "::set-output name=cosa::$cosa"
           echo "::set-output name=matrix::$(seq $stable $rawhide | jq -cnR '[inputs]')"
   build:
     name: "Build container image"
@@ -55,13 +56,13 @@ jobs:
           EOF
           n=${{ matrix.releasever }}
           podman push "${{ env.QUAY_BASE }}:f$n"
-          if [[ $n == ${{ needs.query.outputs.stable }} ]]; then
+          if [[ $n == ${{ needs.query.outputs.cosa }} ]]; then
             podman tag "${{ env.QUAY_BASE }}:f$n" "${{ env.QUAY_BASE }}:latest"
             podman push "${{ env.QUAY_BASE }}:latest"
           fi
           rm ~/.docker/config.json
       - name: Update README and Containerfile
-        if: ${{ matrix.releasever == needs.query.outputs.stable }}
+        if: ${{ matrix.releasever == needs.query.outputs.cosa }}
         run: |
           # This is load-bearing: GitHub will disable the job if the repo
           # doesn't stay active.  Do not enable branch protection for main;
