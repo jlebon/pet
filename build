@@ -4,11 +4,16 @@ set -euo pipefail
 # install packages
 grep -v '^#' deps.txt | xargs dnf install -y
 
+fver=$(. /etc/os-release && echo "${VERSION_ID}")
+cosa_fver=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/main/Dockerfile | grep '^FROM ' | cut -f2 -d:)
+
 # cosa
-(git clone https://github.com/coreos/coreos-assembler
- cd coreos-assembler
- ./build.sh configure_yum_repos
- ./build.sh install_rpms)
+if [ "${fver}" = "${cosa_fver}" ]; then
+  (git clone https://github.com/coreos/coreos-assembler
+   cd coreos-assembler
+   ./build.sh configure_yum_repos
+   ./build.sh install_rpms)
+fi
 
 # rpm-ostree test deps
 (git clone https://github.com/coreos/rpm-ostree
