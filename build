@@ -7,7 +7,6 @@ grep -v '^#' deps.txt | xargs dnf install -y
 # cosa
 (git clone https://github.com/coreos/coreos-assembler
  cd coreos-assembler
- sed -i "s/frozendeps=.*/frozendeps=/" build.sh
  ./build.sh configure_yum_repos
  ./build.sh install_rpms)
 
