@@ -22,3 +22,12 @@ pinentry
 
 git-delta
 ShellCheck
+
+# helix and language servers
+helix
+python-lsp-server
+nodejs-bash-language-server
+# already pulled in via buildroot deps, but for completeness
+clang-tools-extra
+# for generating clangd's `compile_commands.json`
+bear
