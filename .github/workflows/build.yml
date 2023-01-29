@@ -29,8 +29,8 @@ jobs:
           stable=$(curl -L https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/builds.json | jq -r .builds[0].id | cut -f1 -d.)
           rawhide=$(curl -L https://builds.coreos.fedoraproject.org/prod/streams/rawhide/builds/builds.json | jq -r .builds[0].id | cut -f1 -d.)
           cosa=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/main/Dockerfile | grep '^FROM ' | cut -f2 -d:)
-          echo "::set-output name=cosa::$cosa"
-          echo "::set-output name=matrix::$(seq $stable $rawhide | jq -cnR '[inputs]')"
+          echo "cosa=$cosa" >> $GITHUB_OUTPUT
+          echo "matrix=$(seq $stable $rawhide | jq -cnR '[inputs]')" >> $GITHUB_OUTPUT
   build:
     name: "Build container image"
     needs: query
