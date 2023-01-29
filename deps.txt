@@ -23,8 +23,7 @@ pinentry
 git-delta
 ShellCheck
 
-# helix and language servers
-helix
+# language servers for helix
 python-lsp-server
 nodejs-bash-language-server
 # already pulled in via buildroot deps, but for completeness

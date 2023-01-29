@@ -1,9 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-# for helix
-dnf copr enable -y varlad/helix
-
 # install packages
 grep -v '^#' deps.txt | xargs dnf install -y
 
