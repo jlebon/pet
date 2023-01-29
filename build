@@ -1,11 +1,16 @@
 #!/bin/bash
 set -euo pipefail
 
-# install packages
-grep -v '^#' deps.txt | xargs dnf install -y
-
 fver=$(. /etc/os-release && echo "${VERSION_ID}")
 cosa_fver=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/main/Dockerfile | grep '^FROM ' | cut -f2 -d:)
+
+# https://src.fedoraproject.org/rpms/nodejs-bash-language-server/pull-request/1
+if [ "${fver}" = "38" ]; then
+  echo -e "[jlebon-tmp]\nenabled=1\nbaseurl=https://jlebon.fedorapeople.org/nodejs-bash-language-server\ngpgcheck=0\nskip_if_unavailable=False\n" > /etc/yum.repos.d/jlebon.repo
+fi
+
+# install packages
+grep -v '^#' deps.txt | xargs dnf install -y
 
 # cosa
 if [ "${fver}" = "${cosa_fver}" ]; then
