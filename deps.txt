@@ -14,6 +14,8 @@ python3-ipython
 cscope
 gdb
 fzf
+ripgrep
+bat
 virt-install
 mold
 
