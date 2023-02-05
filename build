@@ -25,14 +25,6 @@ fi
  cd fedora-coreos-config
  ci/buildroot/install-buildroot.sh)
 
-# universal tags
-(git clone https://github.com/universal-ctags/ctags
- cd ctags
- ./autogen.sh
- ./configure
- make -j8
- make install)
-
 # we want the host srv
 rmdir /srv && ln -sT /run/host/srv /srv
 

@@ -1,6 +1,3 @@
-vim-enhanced
-# this has clipboard support
-vim-X11
 tmux
 xsel
 
@@ -11,7 +8,6 @@ moreutils
 
 fedpkg
 python3-ipython
-cscope
 gdb
 fzf
 ripgrep
