@@ -16,7 +16,6 @@ gdb
 fzf
 ripgrep
 bat
-virt-install
 mold
 
 # for decrypting GPG files
