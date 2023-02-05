@@ -7,12 +7,20 @@ cosa_fver=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/ma
 # install packages
 grep -v '^#' deps.txt | xargs dnf install -y
 
+# chezmoi
+(curl -Lo chezmoi https://github.com/twpayne/chezmoi/releases/download/v2.29.4/chezmoi-linux-amd64
+ digest=$(sha256sum chezmoi | cut -f1 -d' ')
+ [ "${digest}" = 02077611378b191dcbecdf80f917eae37080cc4ac33177f40be65d19ef23c050 ]
+ chmod a+x chezmoi && mv chezmoi /usr/bin/
+)
+
 # cosa
 if [ "${fver}" = "${cosa_fver}" ]; then
   (git clone https://github.com/coreos/coreos-assembler
    cd coreos-assembler
    ./build.sh configure_yum_repos
-   ./build.sh install_rpms)
+   ./build.sh install_rpms
+   ./build.sh install_ocp_tools)
 fi
 
 # rpm-ostree test deps
