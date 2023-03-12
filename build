@@ -42,3 +42,6 @@ rmdir /srv && ln -sT /run/host/srv /srv
 
 # install rhsetup
 cp rhsetup /usr/bin
+
+# XXX: temporarily until https://bodhi.fedoraproject.org/updates/FEDORA-2023-173bcbfd06 is in
+dnf install -y https://kojipkgs.fedoraproject.org//packages/nodejs-bash-language-server/4.6.1/3.fc37/noarch/nodejs-bash-language-server-4.6.1-3.fc37.noarch.rpm

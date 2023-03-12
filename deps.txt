@@ -22,7 +22,8 @@ ShellCheck
 
 # language servers for helix
 python-lsp-server
-nodejs-bash-language-server
+# XXX: temporarily until https://bodhi.fedoraproject.org/updates/FEDORA-2023-173bcbfd06 is in
+#nodejs-bash-language-server
 # already pulled in via buildroot deps, but for completeness
 clang-tools-extra
 # for generating clangd's `compile_commands.json`
