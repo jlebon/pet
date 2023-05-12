@@ -8,6 +8,10 @@ cosa_fver=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/ma
 # NB: it says rawhide but the definition is the same for all releases
 (cd /etc/yum.repos.d && curl -LO https://copr.fedorainfracloud.org/coprs/jlebon/fzf/repo/fedora-rawhide/jlebon-fzf-fedora-rawhide.repo)
 
+# disable unneeded repos
+(cd /etc/yum.repos.d &&
+ sed -i -e 's/enabled=1/enabled=0/' ./*-modular.repo ./fedora-cisco-openh264.repo)
+
 # install packages
 grep -v '^#' deps.txt | xargs dnf install -y
 
