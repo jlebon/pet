@@ -1,6 +1,6 @@
 # pet
 
-[![quay.io repository](https://img.shields.io/badge/updated-2023--05--28-green)](https://quay.io/repository/jlebon/pet)
+[![quay.io repository](https://img.shields.io/badge/updated-2023--06--04-green)](https://quay.io/repository/jlebon/pet)
 
 This is my [Toolbx](https://containertoolbx.org/) container
 that I use everyday for hacking on
