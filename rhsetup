@@ -4,7 +4,8 @@ set -euo pipefail
 # This tiny script sets up bits of the pet container that require the VPN.
 
 cd /etc/pki/ca-trust/source/anchors
-sudo curl -O https://password.corp.redhat.com/RH-IT-Root-CA.crt
+# contains the 2015 and 2022 IT root CA certs
+sudo curl -O https://certs.corp.redhat.com/certs/Current-IT-Root-CAs.pem
 sudo update-ca-trust extract
 
 cd /etc/yum.repos.d/
