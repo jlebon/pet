@@ -16,9 +16,9 @@ cosa_fver=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/ma
 grep -v '^#' deps.txt | xargs dnf install -y
 
 # chezmoi
-(curl -Lo chezmoi https://github.com/twpayne/chezmoi/releases/download/v2.31.0/chezmoi-linux-amd64
+(curl -Lo chezmoi https://github.com/twpayne/chezmoi/releases/download/v2.39.1/chezmoi-linux-amd64
  digest=$(sha256sum chezmoi | cut -f1 -d' ')
- [ "${digest}" = 3d0b9dc9b34e956143562f8c10130f77725f9c82382710534992a4623e1a627b ]
+ [ "${digest}" = 8589264358009398bab4a84ff8b8d4a3c4df59c68ff705df3531582d7dfda33f ]
  chmod a+x chezmoi && mv chezmoi /usr/bin/
 )
 
