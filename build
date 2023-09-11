@@ -10,7 +10,8 @@ cosa_fver=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/ma
 
 # disable unneeded repos
 (cd /etc/yum.repos.d &&
- sed -i -e 's/enabled=1/enabled=0/' ./*-modular.repo ./fedora-cisco-openh264.repo)
+ sed -i -e 's/enabled=1/enabled=0/' ./fedora-cisco-openh264.repo &&
+ if ls ./*-modular.repo; then sed -i -e 's/enabled=1/enabled=0/' ./*-modular.repo; fi)
 
 # install packages
 grep -v '^#' deps.txt | xargs dnf install -y
