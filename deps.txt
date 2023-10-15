@@ -1,4 +1,5 @@
 tmux
+mosh
 wl-clipboard
 
 irssi
