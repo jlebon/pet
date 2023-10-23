@@ -2,8 +2,6 @@ tmux
 mosh
 wl-clipboard
 
-irssi
-
 # provides /usr/bin/errno
 moreutils
 
