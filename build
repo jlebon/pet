@@ -4,10 +4,6 @@ set -euo pipefail
 fver=$(. /etc/os-release && echo "${VERSION_ID}")
 cosa_fver=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/main/Dockerfile | grep '^FROM ' | cut -f2 -d:)
 
-# temporarily, use a COPR to get latest fzf
-# NB: it says rawhide but the definition is the same for all releases
-(cd /etc/yum.repos.d && curl -LO https://copr.fedorainfracloud.org/coprs/jlebon/fzf/repo/fedora-rawhide/jlebon-fzf-fedora-rawhide.repo)
-
 # disable unneeded repos
 (cd /etc/yum.repos.d &&
  sed -i -e 's/enabled=1/enabled=0/' ./fedora-cisco-openh264.repo &&
