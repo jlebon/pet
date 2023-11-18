@@ -40,12 +40,6 @@ jobs:
       matrix:
         releasever: ${{fromJson(needs.query.outputs.matrix)}}
     steps:
-      # temporary workaround for an error in free disk space action
-      # https://github.com/jlumbroso/free-disk-space/issues/14
-      - name: Update Package List and Remove Dotnet
-        run: |
-          sudo apt-get update
-          sudo apt-get remove -y '^dotnet-.*'
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.0
       - name: Check out repository
