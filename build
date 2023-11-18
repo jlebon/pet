@@ -9,9 +9,6 @@ cosa_fver=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/ma
  sed -i -e 's/enabled=1/enabled=0/' ./fedora-cisco-openh264.repo &&
  if ls ./*-modular.repo &>/dev/null; then sed -i -e 's/enabled=1/enabled=0/' ./*-modular.repo; fi)
 
-# install packages
-grep -v '^#' deps.txt | xargs dnf install -y
-
 # chezmoi
 (curl -Lo chezmoi https://github.com/twpayne/chezmoi/releases/download/v2.40.3/chezmoi-linux-amd64
  digest=$(sha256sum chezmoi | cut -f1 -d' ')
@@ -37,6 +34,9 @@ fi
 (git clone https://github.com/coreos/fedora-coreos-config
  cd fedora-coreos-config
  ci/buildroot/install-buildroot.sh)
+
+# install our packages
+grep -v '^#' deps.txt | xargs dnf install -y
 
 # we want the host srv
 rmdir /srv && ln -sT /run/host/srv /srv
