@@ -16,6 +16,9 @@ cosa_fver=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/ma
  chmod a+x chezmoi && mv chezmoi /usr/bin/
 )
 
+# This gets pulled in by a weak dep of crypto-policies-scripts and conflicts with grub
+if rpm -q sdubby &>/dev/null; then rpm -e sdubby; fi
+
 # cosa
 if [ "${fver}" = "${cosa_fver}" ]; then
   (git clone https://github.com/coreos/coreos-assembler
