@@ -12,7 +12,7 @@ cd /etc/yum.repos.d/
 sudo curl -L -O https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-fedora.repo
 # https://docs.engineering.redhat.com/display/RCMDOC/RCM+Tools+Release+Guide?focusedCommentId=339593129#comment-339593129
 sudo sed -i -e 's,$basearch,x86_64,' /etc/yum.repos.d/rcm-tools-fedora.repo
-sudo dnf install -y rhpkg
+sudo dnf install -y rhel-packager
 
 if [ -e /run/host/etc/krb5.conf.d/redhat ]; then
     sudo ln -s /run/host/etc/krb5.conf.d/redhat /etc/krb5.conf.d/
