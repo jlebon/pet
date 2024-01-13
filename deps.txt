@@ -16,6 +16,9 @@ mold
 # for decrypting GPG files
 pinentry
 
+# for YubiKey
+yubikey-manager
+
 git-delta
 ShellCheck
 
