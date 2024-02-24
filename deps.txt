@@ -1,11 +1,11 @@
 tmux
-mosh
 wl-clipboard
+
+centpkg
 
 # provides /usr/bin/errno
 moreutils
 
-fedpkg
 python3-ipython
 gdb
 fzf
@@ -13,19 +13,5 @@ ripgrep
 bat
 mold
 
-# for decrypting GPG files
-pinentry
-
-# for YubiKey
-yubikey-manager
-
 git-delta
 ShellCheck
-
-# language servers for helix
-python-lsp-server
-nodejs-bash-language-server
-# already pulled in via buildroot deps, but for completeness
-clang-tools-extra
-# for generating clangd's `compile_commands.json`
-bear

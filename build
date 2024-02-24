@@ -1,45 +1,77 @@
 #!/bin/bash
 set -euo pipefail
 
-fver=$(. /etc/os-release && echo "${VERSION_ID}")
-cosa_fver=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/main/Dockerfile | grep '^FROM ' | cut -f2 -d:)
+. /etc/os-release
+
+# The main pet container (:latest) is the one based on cosa's version.
+# Everything else is just for the buildroot.
+matches_cosa_fver=
+if [ "${ID}" = fedora ]; then
+  cosa_fver=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/main/Dockerfile | grep '^FROM ' | cut -f2 -d:)
+  if [ "${cosa_fver}" = "${VERSION_ID}" ]; then
+    matches_cosa_fver=1
+  fi
+fi
 
 # disable unneeded repos
-(cd /etc/yum.repos.d &&
- sed -i -e 's/enabled=1/enabled=0/' ./fedora-cisco-openh264.repo &&
- if ls ./*-modular.repo &>/dev/null; then sed -i -e 's/enabled=1/enabled=0/' ./*-modular.repo; fi)
+(
+  cd /etc/yum.repos.d
+  if test -f fedora-cisco-openh264.repo; then
+    sed -i -e 's/enabled=1/enabled=0/' fedora-cisco-openh264.repo
+  fi
+)
 
 # chezmoi
-(curl -Lo chezmoi https://github.com/twpayne/chezmoi/releases/download/v2.40.3/chezmoi-linux-amd64
- digest=$(sha256sum chezmoi | cut -f1 -d' ')
- [ "${digest}" = 473084408d69aecf1a899fc646e7e1bb1a04ceca558cb361f868b8f1d7addee8 ]
- chmod a+x chezmoi && mv chezmoi /usr/bin/
-)
+curl -Lo chezmoi https://github.com/twpayne/chezmoi/releases/download/v2.40.3/chezmoi-linux-amd64
+digest=$(sha256sum chezmoi | cut -f1 -d' ')
+[ "${digest}" = 473084408d69aecf1a899fc646e7e1bb1a04ceca558cb361f868b8f1d7addee8 ]
+chmod a+x chezmoi && mv chezmoi /usr/bin/
 
 # This gets pulled in by a weak dep of crypto-policies-scripts and conflicts with grub
 if rpm -q sdubby &>/dev/null; then rpm -e sdubby; fi
 
-# cosa
-if [ "${fver}" = "${cosa_fver}" ]; then
-  (git clone https://github.com/coreos/coreos-assembler
-   cd coreos-assembler
-   ./build.sh configure_yum_repos
-   ./build.sh install_rpms
-   ./build.sh install_ocp_tools)
+# cosa deps
+if [ "${matches_cosa_fver}" = 1 ]; then
+  git clone https://github.com/coreos/coreos-assembler
+  (
+    cd coreos-assembler
+    ./build.sh configure_yum_repos
+    ./build.sh install_rpms
+    ./build.sh install_ocp_tools
+  )
 fi
 
 # rpm-ostree test deps
-(git clone https://github.com/coreos/rpm-ostree
- cd rpm-ostree
- ci/install-test-deps.sh)
+git clone https://github.com/coreos/rpm-ostree
+(
+  cd rpm-ostree
+  ci/install-test-deps.sh
+)
 
 # everything in the FCOS buildroot image
-(git clone https://github.com/coreos/fedora-coreos-config
- cd fedora-coreos-config
- ci/buildroot/install-buildroot.sh)
+git clone https://github.com/coreos/fedora-coreos-config
+(
+  cd fedora-coreos-config
+  # Had an issue where if a new kernel is in updates-testing, the builddep
+  # errored out trying to fetch its src (even though I did see the update-testing
+  # source repo get enabled. And on CentOS, that repo doesn't exist.
+  sed -i -e '/updates-testing/ d' ci/buildroot/install-buildroot.sh
+  ci/buildroot/install-buildroot.sh
+)
+
+if [ "${ID}" != fedora ]; then
+  dnf config-manager --set-enabled crb
+  dnf install -y epel-release epel-next-release
+fi
 
 # install our packages
-grep -v '^#' deps.txt | xargs dnf install -y
+grep -hv '^#' deps.txt ${matches_cosa_fver:+deps-pet.txt} | xargs dnf install -y
+
+# but then also redo this on CentOS because the deps are slightly different when
+# actually building RPMs
+if [ "${ID}" != fedora ]; then
+  sudo dnf builddep -y rpm-ostree
+fi
 
 # we want the host srv
 rmdir /srv && ln -sT /run/host/srv /srv

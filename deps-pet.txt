@@ -1,0 +1,17 @@
+mosh
+
+fedpkg
+
+# for decrypting GPG files
+pinentry
+
+# for YubiKey
+yubikey-manager
+
+# language servers for helix
+python-lsp-server
+nodejs-bash-language-server
+# already pulled in via buildroot deps, but for completeness
+clang-tools-extra
+# for generating clangd's `compile_commands.json`
+bear

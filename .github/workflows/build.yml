@@ -2,7 +2,8 @@ name: Build
 
 env:
   QUAY_BASE: quay.io/jlebon/pet
-  TOOLBOX: registry.fedoraproject.org/fedora-toolbox
+  FEDORA_TOOLBOX: registry.fedoraproject.org/fedora-toolbox
+  CENTOS_TOOLBOX: quay.io/toolbx-images/centos-toolbox
 
 on:
   push:
@@ -31,8 +32,8 @@ jobs:
           cosa=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/main/Dockerfile | grep '^FROM ' | cut -f2 -d:)
           echo "cosa=$cosa" >> $GITHUB_OUTPUT
           echo "matrix=$(seq $stable $rawhide | jq -cnR '[inputs]')" >> $GITHUB_OUTPUT
-  build:
-    name: "Build container image"
+  build-fedora:
+    name: "Build Fedora container images"
     needs: query
     runs-on: ubuntu-latest
     strategy:
@@ -48,7 +49,7 @@ jobs:
         run: |
           set -xeuo pipefail
           n=${{ matrix.releasever }}
-          podman build --from $TOOLBOX:$n -t "${{ env.QUAY_BASE }}:f$n" .
+          podman build --from $FEDORA_TOOLBOX:$n -t "${{ env.QUAY_BASE }}:f$n" .
       - name: Push
         run: |
           set -xeuo pipefail
@@ -81,3 +82,31 @@ jobs:
           fi
           git commit -m "README.md: update build date"
           git push
+  build-centos:
+    name: "Build CentOS container images"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        tag: ["stream9:c9s"]
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@v1.3.0
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Build
+        run: |
+          set -xeuo pipefail
+          from_tag=${{ matrix.tag }}; from_tag=${from_tag%:*}
+          to_tag=${{ matrix.tag }}; to_tag=${to_tag#*:}
+          podman build --from $CENTOS_TOOLBOX:$from_tag -t "${{ env.QUAY_BASE }}:$to_tag" -f Containerfile
+      - name: Push
+        run: |
+          set -xeuo pipefail
+          mkdir -p ~/.docker
+          cat > ~/.docker/config.json <<EOF
+          ${{ secrets.QUAY_AUTH }}
+          EOF
+          to_tag=${{ matrix.tag }}; to_tag=${to_tag#*:}
+          podman push "${{ env.QUAY_BASE }}:$to_tag"
+          rm ~/.docker/config.json

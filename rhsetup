@@ -3,16 +3,19 @@ set -euo pipefail
 
 # This tiny script sets up bits of the pet container that require the VPN.
 
+# certs
 cd /etc/pki/ca-trust/source/anchors
 # contains the 2015 and 2022 IT root CA certs
 sudo curl -O https://certs.corp.redhat.com/certs/Current-IT-Root-CAs.pem
 sudo update-ca-trust extract
 
-cd /etc/yum.repos.d/
-sudo curl -L -O https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-fedora.repo
-# https://docs.engineering.redhat.com/display/RCMDOC/RCM+Tools+Release+Guide?focusedCommentId=339593129#comment-339593129
-sudo sed -i -e 's,$basearch,x86_64,' /etc/yum.repos.d/rcm-tools-fedora.repo
-sudo dnf install -y rhel-packager
+if [ "${ID}" = fedora ]; then
+    cd /etc/yum.repos.d/
+    sudo curl -L -O https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-fedora.repo
+    # https://docs.engineering.redhat.com/display/RCMDOC/RCM+Tools+Release+Guide?focusedCommentId=339593129#comment-339593129
+    sudo sed -i -e 's,$basearch,x86_64,' /etc/yum.repos.d/rcm-tools-fedora.repo
+    sudo dnf install -y rhel-packager
+fi
 
 if [ -e /run/host/etc/krb5.conf.d/redhat ]; then
     sudo ln -s /run/host/etc/krb5.conf.d/redhat /etc/krb5.conf.d/
