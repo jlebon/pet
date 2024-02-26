@@ -3,6 +3,8 @@ set -euo pipefail
 
 # This tiny script sets up bits of the pet container that require the VPN.
 
+. /etc/os-release
+
 # certs
 cd /etc/pki/ca-trust/source/anchors
 # contains the 2015 and 2022 IT root CA certs
