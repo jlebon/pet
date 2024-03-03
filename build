@@ -22,10 +22,10 @@ fi
 )
 
 # chezmoi
-curl -Lo chezmoi https://github.com/twpayne/chezmoi/releases/download/v2.47.1/chezmoi-2.47.1-x86_64.rpm
-digest=$(sha256sum chezmoi | cut -f1 -d' ')
+curl -Lo chezmoi.rpm https://github.com/twpayne/chezmoi/releases/download/v2.47.1/chezmoi-2.47.1-x86_64.rpm
+digest=$(sha256sum chezmoi.rpm | cut -f1 -d' ')
 [ "${digest}" = 08b693d7bac64198ff73898a088b862ebf951f669b9fe50049d70751488ddf92 ]
-dnf install -y chezmoi-*.rpm && rm chezmoi-*.rpm
+dnf install -y chezmoi.rpm && rm chezmoi.rpm
 
 # This gets pulled in by a weak dep of crypto-policies-scripts and conflicts with grub
 if rpm -q sdubby &>/dev/null; then rpm -e sdubby; fi
