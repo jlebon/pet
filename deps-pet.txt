@@ -8,8 +8,6 @@ pinentry
 # for YubiKey
 yubikey-manager
 
-zoxide
-
 # language servers for helix
 python-lsp-server
 nodejs-bash-language-server
