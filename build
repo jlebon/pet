@@ -66,6 +66,10 @@ git clone https://github.com/coreos/fedora-coreos-config
   # errored out trying to fetch its src (even though I did see the update-testing
   # source repo get enabled. And on CentOS, that repo doesn't exist.
   sed -i -e '/updates-testing/ d' ci/buildroot/install-buildroot.sh
+  # https://github.com/rpm-software-management/dnf5/pull/810
+  if rpm -q dnf5; then
+    sed -i -e 's/ --spec//g' ci/buildroot/install-buildroot.sh
+  fi
   ci/buildroot/install-buildroot.sh
 )
 
