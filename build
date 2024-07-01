@@ -48,16 +48,6 @@ git clone https://github.com/coreos/rpm-ostree
   ci/install-test-deps.sh
 )
 
-# temporarily carry https://github.com/rpm-software-management/dnf5/pull/1485
-if rpm -q dnf5; then
-  cat >> /usr/share/dnf5/aliases.d/compatibility.conf << EOF
-['download.source']
-type = 'cloned_named_arg'
-long_name = 'source'
-source = 'download.srpm'
-EOF
-fi
-
 # everything in the FCOS buildroot image
 git clone https://github.com/coreos/fedora-coreos-config
 (
