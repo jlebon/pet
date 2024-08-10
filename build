@@ -76,12 +76,6 @@ fi
 # install our packages
 grep -hv '^#' deps.txt ${matches_cosa_fver:+deps-pet.txt} | xargs dnf install -y
 
-# but then also redo this on CentOS because the deps are slightly different when
-# actually building RPMs
-if [ "${ID}" != fedora ]; then
-  sudo dnf builddep -y rpm-ostree
-fi
-
 # we want the host srv
 rmdir /srv && ln -sT /run/host/srv /srv
 
