@@ -2,7 +2,7 @@ name: Build
 
 env:
   QUAY_BASE: quay.io/jlebon/pet
-  FEDORA_TOOLBOX: registry.fedoraproject.org/fedora-toolbox
+  FEDORA_TOOLBOX: quay.io/fedora/fedora-toolbox
   CENTOS_TOOLBOX: quay.io/toolbx-images/centos-toolbox
 
 on:
