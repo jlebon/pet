@@ -49,7 +49,7 @@ jobs:
         run: |
           set -xeuo pipefail
           n=${{ matrix.releasever }}
-          podman build --from $FEDORA_TOOLBOX:$n -t "${{ env.QUAY_BASE }}:f$n" .
+          podman build --security-opt=seccomp=unconfined --from $FEDORA_TOOLBOX:$n -t "${{ env.QUAY_BASE }}:f$n" .
       - name: Push
         run: |
           set -xeuo pipefail
