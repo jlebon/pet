@@ -52,6 +52,11 @@ git clone https://github.com/coreos/rpm-ostree
 git clone https://github.com/coreos/fedora-coreos-config
 (
   cd fedora-coreos-config
+  # The multi-arch hack added for SRPMs is currently breaking things, so
+  # temporarily revert it for now. We just care about x86_64 here anyway.
+  git config user.name 'User Name'
+  git config user.email 'username@example.com'
+  git revert d972c54e3e0da491be26d02d43aae190ff70da5a
   if [ "${ID}" != fedora ]; then
     # on CentOS, that repo doesn't exist
     sed -i -e '/updates-testing/ d' ci/buildroot/install-buildroot.sh
