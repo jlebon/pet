@@ -58,6 +58,9 @@ git clone https://github.com/coreos/fedora-coreos-config
   git config user.email 'username@example.com'
   git revert d972c54e3e0da491be26d02d43aae190ff70da5a
   if [ "${ID}" != fedora ]; then
+    # Temporarily don't include ostree buildreqs on CentOS because of composefs
+    # https://github.com/ostreedev/ostree/pull/3255#issuecomment-2136070745
+    sed -i -e '/ostree/ d' ci/buildroot/buildroot-buildreqs.txt
     # on CentOS, that repo doesn't exist
     sed -i -e '/updates-testing/ d' ci/buildroot/install-buildroot.sh
   fi
