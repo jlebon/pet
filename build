@@ -52,18 +52,9 @@ git clone https://github.com/coreos/rpm-ostree
 git clone https://github.com/coreos/fedora-coreos-config
 (
   cd fedora-coreos-config
-  # Had an issue where if a new kernel is in updates-testing, the builddep
-  # errored out trying to fetch its src (even though I did see the update-testing
-  # source repo get enabled. And on CentOS, that repo doesn't exist.
-  sed -i -e '/updates-testing/ d' ci/buildroot/install-buildroot.sh
-  # https://github.com/rpm-software-management/dnf5/pull/810
-  if rpm -q dnf5; then
-    sed -i -e 's/ --spec//g' ci/buildroot/install-buildroot.sh
-  fi
   if [ "${ID}" != fedora ]; then
-    # Temporarily don't include ostree buildreqs on CentOS because of composefs
-    # https://github.com/ostreedev/ostree/pull/3255#issuecomment-2136070745
-    sed -i -e '/ostree/ d' ci/buildroot/buildroot-buildreqs.txt
+    # on CentOS, that repo doesn't exist
+    sed -i -e '/updates-testing/ d' ci/buildroot/install-buildroot.sh
   fi
   ci/buildroot/install-buildroot.sh
 )
