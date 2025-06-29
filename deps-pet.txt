@@ -2,6 +2,9 @@ mosh
 
 fedpkg
 
+jrnl
+inotify-tools
+
 # for decrypting GPG files
 pinentry
 
