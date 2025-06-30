@@ -35,6 +35,8 @@ if [ "${matches_cosa_fver}" = 1 ]; then
   git clone https://github.com/coreos/coreos-assembler
   (
     cd coreos-assembler
+    # XXX: should fix cosa to default to this if unset
+    export NO_NETWORK=0
     ./build.sh configure_yum_repos
     ./build.sh install_rpms
     ./build.sh install_ocp_tools
