@@ -20,4 +20,4 @@ clang-tools-extra
 bear
 
 # hummingbird deps
-jinja2
+jinja2 ruff
