@@ -61,8 +61,9 @@ git clone https://github.com/coreos/fedora-coreos-config
     # on CentOS, that repo doesn't exist
     sed -i -e '/updates-testing/ d' ci/buildroot/install-buildroot.sh
   fi
-  # we build for multiple Fedora versions; always use `--noclean`
-  sed -i -e 's/${workaround}/--noclean/' ci/buildroot/install-buildroot.sh
+  if [ "${ID}" = fedora ] && [ "${VERSION_ID}" = 42 ]; then
+    sed -i -e 's/rpmbuild -rs/rpmbuild -rs --noclean/' ci/buildroot/install-buildroot.sh
+  fi
   ci/buildroot/install-buildroot.sh
 )
 
