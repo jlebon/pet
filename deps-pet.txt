@@ -1,5 +1,7 @@
 mosh
 
+git-delta
+
 fedpkg
 
 jrnl
