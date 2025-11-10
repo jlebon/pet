@@ -80,7 +80,7 @@ fi
 if [ "${matches_cosa_fver}" = 1 ]; then
   sudo dnf install -y yq
   curl -L https://gitlab.com/redhat/hummingbird/containers/-/raw/main/ci/images/gitlab-ci/properties.yml | \
-    yq '.rpm_packages.all[]' | xargs dnf install -y
+    yq '.rpm_packages.all[]' | grep -v -e coreutils -e hugo -e rpm-lockfile-prototype | xargs dnf install -y
 fi
 
 # install our packages
