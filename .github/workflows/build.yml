@@ -88,7 +88,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        tag: ["stream9:c9s"]
+        tag: ["stream9:c9s", "stream10:c10s"]
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.0
