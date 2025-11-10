@@ -18,6 +18,3 @@ nodejs-bash-language-server
 clang-tools-extra
 # for generating clangd's `compile_commands.json`
 bear
-
-# hummingbird deps
-jinja2 ruff

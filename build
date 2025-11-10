@@ -71,6 +71,13 @@ if [ "${ID}" != fedora ]; then
   dnf install -y epel-release epel-next-release
 fi
 
+# hummingbird
+if [ "${matches_cosa_fver}" = 1 ]; then
+  sudo dnf install -y yq
+  curl -L https://gitlab.com/redhat/hummingbird/containers/-/raw/main/ci/images/gitlab-ci/properties.yml | \
+    yq '.rpm_packages.all[]' | xargs dnf install -y
+fi
+
 # install our packages
 grep -hv '^#' deps.txt ${matches_cosa_fver:+deps-pet.txt} | xargs dnf install -y
 
