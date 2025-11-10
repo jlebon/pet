@@ -52,7 +52,7 @@ git clone https://github.com/coreos/rpm-ostree
 git clone https://github.com/coreos/fedora-coreos-config
 (
   cd fedora-coreos-config
-  if [ "${ID}" != fedora ]; then
+  if [ "${ID}" = centos ]; then
     # Temporarily don't include ostree buildreqs on CentOS because of composefs
     # https://github.com/ostreedev/ostree/pull/3255#issuecomment-2136070745
     sed -i -e '/ostree/ d' ci/buildroot/buildroot-buildreqs.txt
@@ -71,7 +71,7 @@ git clone https://github.com/coreos/fedora-coreos-config
   ci/buildroot/install-buildroot.sh
 )
 
-if [ "${ID}" != fedora ]; then
+if [ "${ID}" = centos ] && [ "${VERSION_ID}" = 9 ]; then
   dnf config-manager --set-enabled crb
   dnf install -y epel-release epel-next-release
 fi
