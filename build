@@ -60,6 +60,10 @@ git clone https://github.com/coreos/fedora-coreos-config
     sed -i -e '/kernel/ d' ci/buildroot/buildroot-buildreqs.txt
     # on CentOS, that repo doesn't exist
     sed -i -e '/updates-testing/ d' ci/buildroot/install-buildroot.sh
+    if [ "${VERSION_ID}" = 9 ]; then
+      # rpm-ostree forked for c9s
+      sed -i -e 's/main/rhel9/' ci/buildroot/buildroot-specs.txt
+    fi
   fi
   if [ "${ID}" = fedora ] && [ "${VERSION_ID}" = 42 ]; then
     sed -i -e 's/rpmbuild -rs/rpmbuild -rs --noclean/' ci/buildroot/install-buildroot.sh
