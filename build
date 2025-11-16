@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -xeuo pipefail
 
 . /etc/os-release
 
@@ -13,13 +13,8 @@ if [ "${ID}" = fedora ]; then
   fi
 fi
 
-# disable unneeded repos
-(
-  cd /etc/yum.repos.d
-  if test -f fedora-cisco-openh264.repo; then
-    sed -i -e 's/enabled=1/enabled=0/' fedora-cisco-openh264.repo
-  fi
-)
+# nuke cisco repo
+rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo
 
 # chezmoi
 curl -Lo chezmoi.rpm https://github.com/twpayne/chezmoi/releases/download/v2.47.1/chezmoi-2.47.1-x86_64.rpm
@@ -52,14 +47,17 @@ git clone https://github.com/coreos/rpm-ostree
 git clone https://github.com/coreos/fedora-coreos-config
 (
   cd fedora-coreos-config
+  # In general, I agree with the sentiment here, but due to the lack of base
+  # version locking, this means we're more prone to upgrading existing packages
+  # rather just being about pulling in net new packages. This works around a bug
+  # right now with the info pkg and its %transfiletriggerpostun.
+  sed -i -e '/updates-testing/ d' ci/buildroot/install-buildroot.sh
   if [ "${ID}" = centos ]; then
     # Temporarily don't include ostree buildreqs on CentOS because of composefs
     # https://github.com/ostreedev/ostree/pull/3255#issuecomment-2136070745
     sed -i -e '/ostree/ d' ci/buildroot/buildroot-buildreqs.txt
     # No matching package to install: 'opencsd-devel >= 1.2.1'
     sed -i -e '/kernel/ d' ci/buildroot/buildroot-buildreqs.txt
-    # on CentOS, that repo doesn't exist
-    sed -i -e '/updates-testing/ d' ci/buildroot/install-buildroot.sh
     if [ "${VERSION_ID}" = 9 ]; then
       # rpm-ostree forked for c9s
       sed -i -e 's/main/rhel9/' ci/buildroot/buildroot-specs.txt
