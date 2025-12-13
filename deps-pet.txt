@@ -20,3 +20,7 @@ nodejs-bash-language-server
 clang-tools-extra
 # for generating clangd's `compile_commands.json`
 bear
+
+# forge tools
+gh
+python3-gitlab
