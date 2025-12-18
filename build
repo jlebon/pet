@@ -82,7 +82,7 @@ if [ "${matches_cosa_fver}" = 1 ]; then
 fi
 
 # install our packages
-grep -hv '^#' deps.txt ${matches_cosa_fver:+deps-pet.txt} | xargs dnf install -y
+grep -hv '^#' deps.txt ${matches_cosa_fver:+deps-pet.txt} | xargs dnf install -y --setopt=install_weak_deps=False
 
 # we want the host srv
 rmdir /srv && ln -sT /run/host/srv /srv
