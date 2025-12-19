@@ -6,7 +6,7 @@ fedpkg
 
 jrnl
 inotify-tools
-diffoscope
+diffoscope diffutils python3-tlsh sqlite
 
 # for decrypting GPG files
 pinentry
