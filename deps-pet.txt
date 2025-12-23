@@ -4,6 +4,8 @@ git-delta
 
 fedpkg
 
+just
+
 jrnl
 inotify-tools
 diffoscope diffutils python3-tlsh sqlite
