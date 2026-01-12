@@ -26,5 +26,4 @@ clang-tools-extra
 bear
 
 # forge tools
-gh
-python3-gitlab
+gh glab
