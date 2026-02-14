@@ -1,4 +1,5 @@
 mosh
+htop
 
 git-delta
 
