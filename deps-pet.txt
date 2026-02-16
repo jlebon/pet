@@ -1,6 +1,8 @@
 mosh
 htop
 
+borgbackup
+
 git-delta
 
 fedpkg
