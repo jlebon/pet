@@ -90,5 +90,9 @@ pip install rhjira
 # we want the host srv
 rmdir /srv && ln -sT /run/host/srv /srv
 
+# and this is to make the pet have access to the host ghostty terminfo
+# (ncurses-term also ships this, but under the 'ghostty' name)
+ln -s /run/host/usr/share/terminfo/x/xterm-ghostty /usr/share/terminfo/x/xterm-ghostty
+
 # install rhsetup
 cp rhsetup /usr/bin
