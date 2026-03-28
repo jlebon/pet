@@ -4,6 +4,7 @@ htop
 borgbackup
 
 git-delta
+difftastic
 
 fedpkg
 fedora-packager-kerberos
