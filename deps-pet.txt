@@ -5,6 +5,7 @@ borgbackup
 
 git-delta
 difftastic
+fd-find
 
 fedpkg
 fedora-packager-kerberos
