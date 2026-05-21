@@ -87,6 +87,10 @@ grep -hv '^#' deps.txt ${matches_cosa_fver:+deps-pet.txt} | xargs dnf install -y
 # and now non-dnf things
 if [ "${matches_cosa_fver}" = 1 ]; then
   pip install rhjira
+
+  # use nightly for now for v0.12 until we move to f44
+  dnf copr enable agriffis/neovim-nightly
+  dnf install -y neovim python3-neovim
 fi
 
 # we want the host srv
