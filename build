@@ -74,13 +74,6 @@ if [ "${ID}" = centos ] && [ "${VERSION_ID}" = 9 ]; then
   dnf install -y epel-release epel-next-release
 fi
 
-# hummingbird
-if [ "${matches_cosa_fver}" = 1 ]; then
-  sudo dnf install -y yq
-  curl -L https://gitlab.com/redhat/hummingbird/containers/-/raw/main/ci/images/gitlab-ci/properties.yml | \
-    yq '.rpm_packages.all[]' | grep -v -e coreutils -e hugo -e rpm-lockfile-prototype -e nodejs22 | xargs dnf install -y
-fi
-
 # install our packages
 grep -hv '^#' deps.txt ${matches_cosa_fver:+deps-pet.txt} | xargs dnf install -y --setopt=install_weak_deps=False
 
