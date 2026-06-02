@@ -7,7 +7,8 @@ set -xeuo pipefail
 # Everything else is just for the buildroot.
 matches_cosa_fver=
 if [ "${ID}" = fedora ]; then
-  cosa_fver=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/main/Dockerfile | grep '^FROM ' | cut -f2 -d:)
+  # XXX: revert to coreos once cosa is on f44
+  cosa_fver=$(curl -L https://raw.githubusercontent.com/jlebon/coreos-assembler/main/Dockerfile | grep '^FROM ' | cut -f2 -d:)
   if [ "${cosa_fver}" = "${VERSION_ID}" ]; then
     matches_cosa_fver=1
   fi
@@ -27,7 +28,8 @@ if rpm -q sdubby &>/dev/null; then rpm -e sdubby; fi
 
 # cosa deps
 if [ "${matches_cosa_fver}" = 1 ]; then
-  git clone https://github.com/coreos/coreos-assembler
+  # XXX: revert to coreos once cosa is on f44
+  git clone https://github.com/jlebon/coreos-assembler
   (
     cd coreos-assembler
     ./build.sh configure_yum_repos

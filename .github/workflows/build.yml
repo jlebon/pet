@@ -27,7 +27,8 @@ jobs:
         id: query_versions
         run: |
           set -xeuo pipefail
-          cosa=$(curl -L https://raw.githubusercontent.com/coreos/coreos-assembler/main/Dockerfile | grep '^FROM ' | cut -f2 -d:)
+          # XXX: revert to coreos once cosa is on f44
+          cosa=$(curl -L https://raw.githubusercontent.com/jlebon/coreos-assembler/main/Dockerfile | grep '^FROM ' | cut -f2 -d:)
           echo "cosa=$cosa" >> $GITHUB_OUTPUT
           rawhide=$(curl -L https://builds.coreos.fedoraproject.org/prod/streams/rawhide/builds/builds.json | jq -r .builds[0].id | cut -f1 -d.)
           echo "matrix=$(seq $cosa $rawhide | jq -cnR '[inputs]')" >> $GITHUB_OUTPUT
