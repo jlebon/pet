@@ -7,8 +7,6 @@ git-delta
 difftastic
 fd-find
 
-git-absorb
-
 yq
 
 fedpkg
@@ -18,7 +16,10 @@ just
 
 jrnl
 inotify-tools
-diffoscope diffutils python3-tlsh sqlite
+# diffoscope and python3-tlsh disabled until python3-magic vs
+# python3-file-magic conflict is resolved (RHBZ#2464627)
+# diffoscope python3-tlsh
+diffutils sqlite
 
 # for decrypting GPG files
 pinentry
