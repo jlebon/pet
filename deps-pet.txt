@@ -37,3 +37,6 @@ bear
 
 # forge tools
 gh glab
+
+# kubectl
+kubernetes-client
