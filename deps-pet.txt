@@ -13,6 +13,7 @@ fedpkg
 fedora-packager-kerberos
 
 just
+ruff
 
 jrnl
 inotify-tools
