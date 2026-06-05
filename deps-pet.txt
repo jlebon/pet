@@ -41,3 +41,6 @@ gh glab
 
 # kubectl
 kubernetes-client
+
+# https://bugzilla.redhat.com/show_bug.cgi?id=2418608
+nodejs24-full-i18n
