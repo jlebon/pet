@@ -1,6 +1,9 @@
 mosh
 htop
 
+# for ankiconnect bridge
+socat
+
 borgbackup
 
 git-delta
