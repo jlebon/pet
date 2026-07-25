@@ -18,6 +18,8 @@ fedora-packager-kerberos
 just
 ruff
 
+crun-krun
+
 jrnl
 inotify-tools
 # diffoscope and python3-tlsh disabled until python3-magic vs
